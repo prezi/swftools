@@ -1273,7 +1273,7 @@ void VectorGraphicOutputDev::drawGeneralImage(GfxState *state, Object *ref, Stre
 	  pic[width*y+x].r = (unsigned char)(colToByte(rgb.r));
 	  pic[width*y+x].g = (unsigned char)(colToByte(rgb.g));
 	  pic[width*y+x].b = (unsigned char)(colToByte(rgb.b));
-	  pic[width*y+x].a = 255;//(U8)(rgb.a * 255 + 0.5);
+	  pic[width*y+x].a = (unsigned char)(state->getFillOpacity() * 255.0);
 	  if(maskbitmap) {
               int x1 = x*maskWidth/width;
               int y1 = y*maskHeight/height;
