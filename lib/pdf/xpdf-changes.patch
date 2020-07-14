@@ -2565,15 +2565,26 @@
 
 --- xpdf-3.02_fix/Gfx.cc	2017-05-08 01:51:09.380121226 -0700
 +++ xpdf-3.02/Gfx.cc	2017-05-08 01:57:04.690898645 -0700
-@@ -3850,6 +3850,11 @@
-     out->endTransparencyGroup(state);
-   }
+@@ -3843,10 +3843,19 @@
+   // draw the form
+   display(str, gFalse);
  
++  // restore the old state, possibly popping leftover states by the form
++  while(state != old_state && state->hasSaves()) {
++    restoreState();
++  }
++
++  // it is possible that the form actually popped our state,
++  // in which case just bail out
 +  if (old_state != state) {
 +      error(getPos(), "There's a form with uneven q and Q operations");
 +      exit(-1);
 +  }
 +
-   // restore base matrix
-   for (i = 0; i < 6; ++i) {
-     baseMatrix[i] = oldBaseMatrix[i];
+   if (softMask || transpGroup) {
+-    // restore graphics state
+-    while(state != old_state)
+-	restoreState();
+     out->endTransparencyGroup(state);
+   }
+ 
